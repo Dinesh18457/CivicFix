@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+models/*.pkl
+!models/.gitkeep
+data/*.csv
+!data/.gitkeep
