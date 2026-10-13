@@ -1,0 +1,33 @@
+{
+  "sample_size": 4000,
+  "kmeans": {
+    "algorithm": "KMeans",
+    "clusters": 5,
+    "silhouette": 0.483368394673493
+  },
+  "dbscan": {
+    "algorithm": "DBSCAN",
+    "sample_size": 2000,
+    "clusters_excluding_noise": 21,
+    "noise_points": 85
+  },
+  "hierarchical": {
+    "algorithm": "Hierarchical clustering (Ward)",
+    "sample_size": 2000,
+    "clusters": 5
+  },
+  "dimensionality_reduction": {
+    "algorithm": "TruncatedSVD + PCA",
+    "components": 2,
+    "explained_variance_ratio": [
+      0.2223975717495206,
+      0.18975023655242634
+    ],
+    "tsne_sample_size": 1000
+  },
+  "anomaly_detection": {
+    "algorithm": "Isolation Forest",
+    "anomalies": 239,
+    "sample_size": 4000
+  }
+}

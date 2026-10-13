@@ -1,0 +1,116 @@
+2026-08-25 14:10:19,570 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-25 14:10:19,570 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-25 14:10:19,571 - INFO -  * Restarting with stat
+2026-08-25 14:10:21,347 - WARNING -  * Debugger is active!
+2026-08-25 14:10:21,350 - INFO -  * Debugger PIN: 364-459-706
+2026-08-25 14:12:37,758 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-25 14:12:37,758 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-25 14:12:37,760 - INFO -  * Restarting with stat
+2026-08-25 14:12:39,342 - WARNING -  * Debugger is active!
+2026-08-25 14:12:39,344 - INFO -  * Debugger PIN: 364-459-706
+2026-08-25 14:12:47,263 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-25 14:12:47,263 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-25 14:12:47,264 - INFO -  * Restarting with stat
+2026-08-25 14:12:48,976 - WARNING -  * Debugger is active!
+2026-08-25 14:12:48,979 - INFO -  * Debugger PIN: 364-459-706
+2026-08-25 14:13:41,380 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-25 14:13:41,380 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-25 14:13:41,382 - INFO -  * Restarting with stat
+2026-08-25 14:13:42,954 - WARNING -  * Debugger is active!
+2026-08-25 14:13:42,957 - INFO -  * Debugger PIN: 364-459-706
+2026-08-25 14:14:09,055 - INFO - 127.0.0.1 - - [25/Aug/2026 14:14:09] "GET / HTTP/1.1" 200 -
+2026-08-25 14:14:09,158 - INFO - 127.0.0.1 - - [25/Aug/2026 14:14:09] "GET /static/style.css HTTP/1.1" 200 -
+2026-08-25 14:14:09,162 - INFO - 127.0.0.1 - - [25/Aug/2026 14:14:09] "GET /static/resolution_histogram.png HTTP/1.1" 200 -
+2026-08-25 14:14:09,163 - INFO - 127.0.0.1 - - [25/Aug/2026 14:14:09] "GET /static/borough_distribution.png HTTP/1.1" 200 -
+2026-08-25 14:14:09,423 - INFO - 127.0.0.1 - - [25/Aug/2026 14:14:09] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-08-25 14:14:21,846 - INFO - TRACE | Input: {'descriptor': 'Loud music', 'borough': 'BROOKLYN', 'hour': 14} | Predictions: {'agency': 'NYPD', 'time_hrs': 2.9} | Latency: 2453.01ms
+2026-08-25 14:14:21,848 - INFO - 127.0.0.1 - - [25/Aug/2026 14:14:21] "POST /predict HTTP/1.1" 200 -
+2026-08-25 14:14:21,874 - INFO - 127.0.0.1 - - [25/Aug/2026 14:14:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2026-08-25 14:14:21,874 - INFO - 127.0.0.1 - - [25/Aug/2026 14:14:21] "[36mGET /static/borough_distribution.png HTTP/1.1[0m" 304 -
+2026-08-25 14:14:21,875 - INFO - 127.0.0.1 - - [25/Aug/2026 14:14:21] "[36mGET /static/resolution_histogram.png HTTP/1.1[0m" 304 -
+2026-08-25 14:33:01,154 - INFO - TRACE | Input: {'descriptor': 'potholes', 'borough': 'QUEENS', 'hour': 14} | Predictions: {'agency': 'DSNY', 'time_hrs': 9.6} | Latency: 9.99ms
+2026-08-25 14:33:01,155 - INFO - 127.0.0.1 - - [25/Aug/2026 14:33:01] "POST /predict HTTP/1.1" 200 -
+2026-08-25 14:33:01,175 - INFO - 127.0.0.1 - - [25/Aug/2026 14:33:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2026-08-25 14:33:01,176 - INFO - 127.0.0.1 - - [25/Aug/2026 14:33:01] "[36mGET /static/borough_distribution.png HTTP/1.1[0m" 304 -
+2026-08-25 14:33:01,177 - INFO - 127.0.0.1 - - [25/Aug/2026 14:33:01] "[36mGET /static/resolution_histogram.png HTTP/1.1[0m" 304 -
+2026-08-25 14:34:18,677 - INFO -  * Detected change in 'E:\\Projects\\CivicFix\\civicfix_app\\ml\\eda.py', reloading
+2026-08-25 14:34:18,876 - INFO -  * Restarting with stat
+2026-08-25 14:34:20,960 - WARNING -  * Debugger is active!
+2026-08-25 14:34:20,965 - INFO -  * Debugger PIN: 364-459-706
+2026-08-25 14:36:30,385 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-25 14:36:30,385 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-25 14:36:30,386 - INFO -  * Restarting with stat
+2026-08-25 14:36:31,968 - WARNING -  * Debugger is active!
+2026-08-25 14:36:31,970 - INFO -  * Debugger PIN: 364-459-706
+2026-08-25 14:36:37,915 - INFO - TRACE | Input: {'descriptor': 'potholes', 'borough': 'QUEENS', 'hour': 14} | Predictions: {'agency': 'DSNY', 'time_hrs': 9.6} | Latency: 1524.84ms
+2026-08-25 14:36:37,923 - INFO - 127.0.0.1 - - [25/Aug/2026 14:36:37] "POST /predict HTTP/1.1" 200 -
+2026-08-25 14:36:38,025 - INFO - 127.0.0.1 - - [25/Aug/2026 14:36:38] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2026-08-25 14:36:38,026 - INFO - 127.0.0.1 - - [25/Aug/2026 14:36:38] "[36mGET /static/borough_distribution.png HTTP/1.1[0m" 304 -
+2026-08-25 14:36:38,027 - INFO - 127.0.0.1 - - [25/Aug/2026 14:36:38] "[36mGET /static/resolution_histogram.png HTTP/1.1[0m" 304 -
+2026-08-25 14:38:07,723 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-25 14:38:07,723 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-25 14:38:07,726 - INFO -  * Restarting with stat
+2026-08-25 14:38:09,319 - WARNING -  * Debugger is active!
+2026-08-25 14:38:09,321 - INFO -  * Debugger PIN: 364-459-706
+2026-08-25 14:38:21,854 - INFO - TRACE | Input: {'descriptor': 'potholes', 'borough': 'QUEENS', 'hour': 14} | Predictions: {'agency': 'DSNY', 'time_hrs': 9.6} | Latency: 1575.14ms
+2026-08-25 14:38:21,863 - INFO - 127.0.0.1 - - [25/Aug/2026 14:38:21] "POST /predict HTTP/1.1" 200 -
+2026-08-25 14:38:21,961 - INFO - 127.0.0.1 - - [25/Aug/2026 14:38:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2026-08-25 14:38:21,962 - INFO - 127.0.0.1 - - [25/Aug/2026 14:38:21] "[36mGET /static/borough_distribution.png HTTP/1.1[0m" 304 -
+2026-08-25 14:38:21,963 - INFO - 127.0.0.1 - - [25/Aug/2026 14:38:21] "[36mGET /static/resolution_histogram.png HTTP/1.1[0m" 304 -
+2026-08-25 14:39:49,992 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-25 14:39:49,993 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-25 14:39:49,994 - INFO -  * Restarting with stat
+2026-08-25 14:39:51,608 - WARNING -  * Debugger is active!
+2026-08-25 14:39:51,611 - INFO -  * Debugger PIN: 364-459-706
+2026-08-25 14:39:57,243 - INFO - TRACE | Input: {'descriptor': 'potholes', 'borough': 'QUEENS', 'hour': 14} | Predictions: {'agency': 'DSNY', 'time_hrs': 9.6} | Latency: 1332.44ms
+2026-08-25 14:39:57,249 - INFO - 127.0.0.1 - - [25/Aug/2026 14:39:57] "POST /predict HTTP/1.1" 200 -
+2026-08-25 14:39:57,305 - INFO - 127.0.0.1 - - [25/Aug/2026 14:39:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2026-08-29 14:54:19,069 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-29 14:54:19,069 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-29 14:54:19,076 - INFO -  * Restarting with stat
+2026-08-29 14:54:27,206 - WARNING -  * Debugger is active!
+2026-08-29 14:54:27,225 - INFO -  * Debugger PIN: 111-169-322
+2026-08-29 14:55:14,231 - INFO - 127.0.0.1 - - [29/Aug/2026 14:55:14] "GET / HTTP/1.1" 200 -
+2026-08-29 14:55:14,482 - INFO - 127.0.0.1 - - [29/Aug/2026 14:55:14] "GET /static/style.css HTTP/1.1" 200 -
+2026-08-29 14:55:16,887 - INFO - 127.0.0.1 - - [29/Aug/2026 14:55:16] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-08-29 14:55:44,993 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-29 14:55:44,993 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-29 14:55:44,998 - INFO -  * Restarting with stat
+2026-08-29 14:55:52,682 - WARNING -  * Debugger is active!
+2026-08-29 14:55:52,694 - INFO -  * Debugger PIN: 111-169-322
+2026-08-29 14:56:56,520 - INFO -  * Detected change in 'E:\\Projects\\CivicFix\\app.py', reloading
+2026-08-29 14:56:57,095 - INFO -  * Restarting with stat
+2026-08-29 14:57:08,144 - WARNING -  * Debugger is active!
+2026-08-29 14:57:08,167 - INFO -  * Debugger PIN: 111-169-322
+2026-08-29 14:57:17,965 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-29 14:57:17,965 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-29 14:57:17,970 - INFO -  * Restarting with stat
+2026-08-29 14:57:25,712 - WARNING -  * Debugger is active!
+2026-08-29 14:57:25,728 - INFO -  * Debugger PIN: 111-169-322
+2026-08-29 14:57:26,554 - INFO - 127.0.0.1 - - [29/Aug/2026 14:57:26] "GET / HTTP/1.1" 200 -
+2026-08-29 14:57:26,731 - INFO - 127.0.0.1 - - [29/Aug/2026 14:57:26] "GET /static/style.css HTTP/1.1" 200 -
+2026-08-29 14:57:28,283 - INFO - 127.0.0.1 - - [29/Aug/2026 14:57:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-08-29 15:00:12,574 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-08-29 15:00:12,575 - INFO - [33mPress CTRL+C to quit[0m
+2026-08-29 15:00:12,580 - INFO -  * Restarting with stat
+2026-08-29 15:00:21,798 - WARNING -  * Debugger is active!
+2026-08-29 15:00:21,809 - INFO -  * Debugger PIN: 111-169-322
+2026-08-29 15:00:22,439 - INFO - 127.0.0.1 - - [29/Aug/2026 15:00:22] "GET / HTTP/1.1" 200 -
+2026-08-29 15:00:22,620 - INFO - 127.0.0.1 - - [29/Aug/2026 15:00:22] "GET /static/style.css HTTP/1.1" 200 -
+2026-08-29 15:00:26,544 - INFO - 127.0.0.1 - - [29/Aug/2026 15:00:26] "GET / HTTP/1.1" 200 -
+2026-08-29 15:00:26,576 - INFO - 127.0.0.1 - - [29/Aug/2026 15:00:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2026-08-29 15:00:34,844 - INFO - 127.0.0.1 - - [29/Aug/2026 15:00:34] "GET / HTTP/1.1" 200 -
+2026-08-29 15:00:34,878 - INFO - 127.0.0.1 - - [29/Aug/2026 15:00:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2026-08-29 15:01:56,090 - INFO - 127.0.0.1 - - [29/Aug/2026 15:01:56] "GET / HTTP/1.1" 200 -
+2026-08-29 15:01:56,125 - INFO - 127.0.0.1 - - [29/Aug/2026 15:01:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -

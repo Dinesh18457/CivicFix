@@ -1,138 +1,101 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CivicFix | Intelligent 311 Dispatch Platform</title>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101d18"><meta name="description" content="CivicFix turns NYC 311 service requests into transparent, actionable civic intelligence.">
+  <title>{% block title %}CivicFix · Civic intelligence{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-  <!-- Top Navigation Header -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="logo">
-        <i class="fa-solid fa-city logo-icon"></i>
-        <span>Civic<strong>Fix</strong></span>
+<header class="site-header">
+  <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5 28.5 10v12L16 28.5 3.5 22V10L16 3.5Z"/><path d="m10.2 16.4 3.8 3.8 8.1-8.1"/></svg></span><span>Civic<span class="brand-light">Fix</span><small>NYC 311 INTELLIGENCE</small></span></a>
+  <nav class="primary-nav" aria-label="Main navigation">
+    <a class="{{ 'active' if active_nav == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a class="{{ 'active' if active_nav == 'data' else '' }}" href="{{ url_for('data_page') }}">Data</a>
+    <details class="nav-dropdown {{ 'active' if active_nav in ['outcomes','models','explore','regression','ensemble','unsupervised','evaluation'] else '' }}">
+      <summary>Outcomes <span class="nav-chevron">⌄</span></summary>
+      <div class="outcomes-menu" aria-label="Project outcome areas">
+        <a href="{{ url_for('explore') }}"><span class="outcome-menu-icon">◒</span><span><strong>EDA</strong><small>Profile the NYC 311 data</small></span><b>→</b></a>
+        <a href="{{ url_for('regression_page') }}"><span class="outcome-menu-icon">⌁</span><span><strong>Regression</strong><small>Resolution-time diagnostics</small></span><b>→</b></a>
+        <a href="{{ url_for('ensemble_page') }}#ensemble"><span class="outcome-menu-icon">⟡</span><span><strong>Ensemble</strong><small>Compare routing models</small></span><b>→</b></a>
+        <a href="{{ url_for('unsupervised_page') }}#unsupervised"><span class="outcome-menu-icon">◌</span><span><strong>Unsupervised</strong><small>Discover request patterns</small></span><b>→</b></a>
+        <a href="{{ url_for('evaluation_page') }}#evaluation"><span class="outcome-menu-icon">✓</span><span><strong>Evaluation</strong><small>Metrics and validation</small></span><b>→</b></a>
       </div>
-      <div class="nav-badge">
-        <span class="status-dot"></span> ML Dispatch System Live
-      </div>
-    </div>
-  </header>
+    </details>
+    <a class="{{ 'active' if active_nav in ['operations','lifecycle'] else '' }}" href="{{ url_for('operations') }}">MLOps</a>
+    <a class="{{ 'active' if active_nav == 'predict' else '' }}" href="{{ url_for('predict') }}">Predict</a>
+  </nav>
+  <a class="header-health" href="{{ url_for('health') }}" aria-label="System health"><i></i>Live</a>
+</header>
+<main class="main-area">
+  <div class="page-wrap">
+  {% if not stats.data_available %}<div class="notice warning">Dataset not found. Add <code>nyc_311_data.csv</code> to <code>civicfix_app/data</code> to enable live analytics.</div>{% endif %}
 
-  <main class="main-container">
-
-    <!-- Hero Banner -->
-    <section class="hero-section">
-      <h1>311 Smart Dispatch & Resolution Analytics</h1>
-      <p>AI-powered agency routing and estimated resolution timeframe predictor for municipal requests.</p>
-    </section>
-
-    <!-- Dashboard Grid -->
-    <div class="dashboard-grid">
-
-      <!-- Prediction Form Card -->
-      <div class="card form-card">
-        <div class="card-header">
-          <i class="fa-solid fa-file-signature"></i>
-          <h2>Submit Service Request</h2>
-        </div>
-
-        <form action="/predict" method="POST" class="dispatch-form">
-          <div class="form-group">
-            <label for="descriptor">
-              <i class="fa-solid fa-align-left"></i> Complaint Description
-            </label>
-            <textarea
-              id="descriptor"
-              name="descriptor"
-              rows="4"
-              placeholder="e.g., Loud music coming from neighbor's apartment late at night or overflowing trash on street corner..."
-              required></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="borough">
-              <i class="fa-solid fa-location-dot"></i> Select Borough
-            </label>
-            <div class="select-wrapper">
-              <select id="borough" name="borough" required>
-                <option value="MANHATTAN" {{ 'selected' if borough == 'MANHATTAN' else '' }}>Manhattan</option>
-                <option value="BROOKLYN" {{ 'selected' if borough == 'BROOKLYN' or not borough else '' }}>Brooklyn</option>
-                <option value="QUEENS" {{ 'selected' if borough == 'QUEENS' else '' }}>Queens</option>
-                <option value="BRONX" {{ 'selected' if borough == 'BRONX' else '' }}>Bronx</option>
-                <option value="STATEN ISLAND" {{ 'selected' if borough == 'STATEN ISLAND' else '' }}>Staten Island</option>
-              </select>
-            </div>
-          </div>
-
-          <button type="submit" class="btn-submit">
-            <i class="fa-solid fa-paper-plane"></i> Route Request & Estimate
-          </button>
-        </form>
-
-        <!-- Submitted Tasks History Box -->
-        {% if history %}
-        <div class="results-box" style="margin-top: 20px; padding: 16px; background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h3 style="color: #1e293b; font-size: 1rem; margin: 0; display: flex; align-items: center; gap: 8px;">
-              <i class="fa-solid fa-list-check"></i> Submitted Tasks History
-            </h3>
-            <span style="background: #2563eb; color: white; padding: 2px 10px; border-radius: 12px; font-weight: bold; font-size: 0.85rem;">
-              Total: {{ history|length }}
-            </span>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto;">
-            {% for task in history %}
-            <div style="background: white; padding: 10px 14px; border-radius: 6px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-              <div style="font-size: 0.85rem; color: #475569; margin-bottom: 6px;">
-                <strong>Task #{{ task.id }}:</strong> "{{ task.descriptor }}" | <strong>Borough:</strong> {{ task.borough }}
-              </div>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="background-color: #1e40af; color: white; padding: 3px 10px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">
-                  Agency: {{ task.agency }}
-                </span>
-                <span style="background-color: #0284c7; color: white; padding: 3px 10px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">
-                  Time: {{ task.time }} Hours
-                </span>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
-
-      </div>
-
-      <!-- Analytics Charts Card -->
-      <div class="card charts-card">
-        <div class="card-header">
-          <i class="fa-solid fa-chart-line"></i>
-          <h2>Dataset Analytics & Insights</h2>
-        </div>
-
-        <div class="charts-container">
-          <div class="chart-wrapper">
-            <h3>Borough Distribution</h3>
-            <img src="{{ url_for('static', filename='borough_distribution.png') }}" alt="Borough Distribution Chart" class="chart-img">
-          </div>
-          <div class="chart-wrapper">
-            <h3>Resolution Time Histogram</h3>
-            <img src="{{ url_for('static', filename='resolution_histogram.png') }}" alt="Resolution Time Histogram Chart" class="chart-img">
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </main>
-
-  <footer class="footer">
-    <p>Powered by Scikit-Learn, Flask & 311 Municipal Dataset</p>
-  </footer>
-
-</body>
-</html>
+  {% if active_page == 'dashboard' %}
+  <section class="welcome"><div><div class="eyebrow"><span class="eyebrow-dot"></span> CIVIC INTELLIGENCE PLATFORM <span class="eyebrow-line"></span> LIVE DATA</div><h1>Better service starts<br>with <em>being understood.</em></h1><p>See what your city needs. Route every request to the right team. Make every outcome count.</p><div class="welcome-actions"><a class="button button-primary" href="{{ url_for('predict') }}">＋ &nbsp;Route a service request <span>→</span></a><a class="text-link" href="{{ url_for('explore') }}">Explore city patterns <span>↗</span></a></div></div><div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="sun"></div><div class="skyline"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="hero-caption"><span>✳</span> One city. Every voice.</div></div></section>
+  <div class="section-kicker"><span>THE CITY, AT A GLANCE</span><span class="muted">Live from the NYC 311 dataset</span></div>
+  <section class="kpi-grid">
+    <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon mint">▤</span><span class="kpi-overline">TOTAL REQUESTS</span><span class="trend-neutral">ALL RECORDS</span></div><div class="kpi-number">{{ "{:,}".format(stats.records) }}</div><div class="kpi-foot">Historical service requests in dataset</div></article>
+    <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon blue">⌖</span><span class="kpi-overline">CITY COVERAGE</span></div><div class="kpi-number">{{ stats.boroughs }}<small> boroughs</small></div><div class="kpi-foot">Across {{ stats.agencies }} responding agencies</div></article>
+    <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon amber">◷</span><span class="kpi-overline">CURRENTLY OPEN</span><span class="status-pill">IN PROGRESS</span></div><div class="kpi-number">{{ "{:,}".format(stats.open) }}</div><div class="kpi-foot">Requests marked open or in progress</div></article>
+    <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon violet">↗</span><span class="kpi-overline">MEDIAN RESOLUTION</span></div><div class="kpi-number">{{ stats.avg_hours if stats.avg_hours is not none else '—' }}<small> hrs</small></div><div class="kpi-foot">Among requests with valid close times</div></article>
+  </section>
+  <section class="dashboard-grid"><article class="panel chart-panel"><div class="panel-heading"><div><h2>Requests across the boroughs</h2><p>Where service is being requested</p></div><span class="panel-tag">GEOGRAPHY</span></div><div class="bar-chart">{% for item in stats.borough_counts %}<div class="bar-row"><span class="bar-label">{{ item.label }}</span><div class="bar-track"><i style="width: {{ (item.value / stats.borough_counts[0].value * 100) if stats.borough_counts else 0 }}%"></i></div><b>{{ "{:,}".format(item.value) }}</b></div>{% else %}<p class="empty-state">Borough data will appear here.</p>{% endfor %}</div><a class="panel-link" href="{{ url_for('explore') }}">Explore all city patterns <span>→</span></a></article>
+  <article class="panel"><div class="panel-heading"><div><h2>Most reported concerns</h2><p>Top complaint categories</p></div><span class="panel-tag">TOP 5</span></div><div class="rank-list">{% for item in stats.top_complaints %}<div class="rank-row"><span class="rank-num">{{ "%02d"|format(loop.index) }}</span><span class="rank-name">{{ item.label }}</span><b>{{ "{:,}".format(item.value) }}</b></div>{% else %}<p class="empty-state">Complaint data will appear here.</p>{% endfor %}</div><a class="panel-link" href="{{ url_for('data_page') }}">Browse service requests <span>→</span></a></article></section>
+  <section class="panel recent-panel"><div class="panel-heading"><div><h2>Recently filed</h2><p>A live look at incoming 311 requests</p></div><a class="small-link" href="{{ url_for('data_page') }}">View all requests →</a></div><div class="table-scroll"><table><thead><tr><th>REQUEST</th><th>TYPE</th><th>BOROUGH</th><th>AGENCY</th><th>STATUS</th></tr></thead><tbody>{% for row in stats.recent %}<tr><td class="id-cell">#{{ row.unique_key }}</td><td>{{ row.complaint_type }}</td><td>{{ row.borough|title }}</td><td><span class="agency-chip">{{ row.agency }}</span></td><td><span class="state-dot {{ 'is-closed' if 'closed' in row.status|lower else '' }}"></span>{{ row.status|title }}</td></tr>{% else %}<tr><td colspan="5" class="empty-state">No records to display yet.</td></tr>{% endfor %}</tbody></table></div></section>
+  <section class="outcome-strip"><div class="strip-icon">✳</div><div><strong>From insight to action.</strong><span>Trace each prediction from raw data to a real-world dispatch decision.</span></div><a href="{{ url_for('lifecycle') }}">Follow the lifecycle <span>→</span></a></section>
+  {% elif active_page == 'data' %}
+  <div class="page-heading"><div><div class="eyebrow">THE SOURCE OF EVERY INSIGHT</div><h1>Service request data</h1><p>Search real NYC 311 records from the dataset included in this project.</p></div><span class="count-badge">{{ "{:,}".format(stats.records) }} records</span></div>
+  <section class="panel data-panel"><form class="filter-row" method="get"><label class="search-field"><span>⌕</span><input name="q" value="{{ query }}" placeholder="Search complaints, agencies, boroughs…" aria-label="Search service requests"></label><select name="borough" aria-label="Filter by borough"><option value="">All boroughs</option>{% for b in boroughs %}<option value="{{ b }}" {{ 'selected' if selected_borough == b else '' }}>{{ b|title }}</option>{% endfor %}</select><button class="button button-dark" type="submit">Filter records</button>{% if query or selected_borough %}<a class="clear-link" href="{{ url_for('data_page') }}">Clear</a>{% endif %}</form><div class="table-scroll"><table><thead><tr><th>REQUEST</th><th>FILED</th><th>COMPLAINT</th><th>DESCRIPTION</th><th>BOROUGH</th><th>AGENCY</th><th>STATUS</th></tr></thead><tbody>{% for row in rows %}<tr><td class="id-cell">#{{ row.unique_key }}</td><td class="muted">{{ row.created_date }}</td><td>{{ row.complaint_type }}</td><td class="desc-cell">{{ row.descriptor }}</td><td>{{ row.borough|title }}</td><td><span class="agency-chip">{{ row.agency }}</span></td><td>{{ row.status|title }}</td></tr>{% else %}<tr><td colspan="7" class="empty-state">No matching records. Try a different search.</td></tr>{% endfor %}</tbody></table></div><div class="table-note">Showing up to 30 matching records · Search covers complaint type, description, agency and borough</div></section>
+  {% elif active_page == 'explore' %}
+  <div class="page-heading eda-heading"><div><div class="eyebrow"><span class="eyebrow-dot"></span> NYC 311 DATA PROFILE</div><h1>Exploratory data analysis</h1><p>A clear, end-to-end view of the service requests, their patterns, and the resolution-time target.</p></div><span class="count-badge">{{ eda.records }} records · {{ eda.fields }} fields</span></div>
+  <div class="eda-section-title"><span>01</span><div><h2>Dataset overview</h2><p>Scope and coverage of the data included in this project.</p></div></div>
+  <section class="eda-stat-grid eda-overview-grid"><article class="panel eda-stat"><span>RECORDS</span><strong>{{ eda.records }}</strong><small>311 service requests</small></article><article class="panel eda-stat"><span>FEATURES</span><strong>{{ eda.fields }}</strong><small>Available dataset fields</small></article><article class="panel eda-stat"><span>AGENCIES</span><strong>{{ eda.agencies }}</strong><small>Responding organizations</small></article></section>
+  <div class="eda-section-title"><span>02</span><div><h2>Descriptive statistics</h2><p>Numeric field summaries. ZIP, district, and precinct are identifiers, so their averages are descriptive only.</p></div></div>
+  <section class="panel eda-table-panel"><div class="table-scroll"><table class="eda-table"><thead><tr><th>NUMERIC FIELD</th><th>VALID</th><th>MEAN</th><th>MEDIAN</th><th>STD. DEV.</th><th>MIN</th><th>MAX</th><th>MISSING</th></tr></thead><tbody>{% for row in eda.descriptive %}<tr><td><strong>{{ row.name }}</strong></td><td>{{ row.count }}</td><td>{{ row.mean }}</td><td>{{ row.median }}</td><td>{{ row.std }}</td><td>{{ row.min }}</td><td>{{ row.max }}</td><td>{{ row.missing }}</td></tr>{% else %}<tr><td colspan="8" class="empty-state">Numeric summaries are unavailable for this dataset.</td></tr>{% endfor %}</tbody></table></div><div class="table-note">Resolution-time summaries use valid positive durations; extreme values are retained here so the full distribution remains transparent.</div></section>
+  <div class="eda-section-title"><span>03</span><div><h2>Potential outliers</h2><p>Values beyond the 1.5×IQR fences are flagged for investigation, not automatically treated as errors.</p></div></div>
+  <section class="panel eda-table-panel"><div class="table-scroll"><table class="eda-table"><thead><tr><th>FIELD</th><th>Q1</th><th>Q3</th><th>LOWER FENCE</th><th>UPPER FENCE</th><th>FLAGGED</th><th>SHARE</th></tr></thead><tbody>{% for row in eda.outliers %}<tr><td><strong>{{ row.name }}</strong></td><td>{{ row.q1 }}</td><td>{{ row.q3 }}</td><td>{{ row.lower }}</td><td>{{ row.upper }}</td><td>{{ row.count }}</td><td><span class="eda-share-pill">{{ row.share }}</span></td></tr>{% else %}<tr><td colspan="7" class="empty-state">No fields are available for outlier analysis.</td></tr>{% endfor %}</tbody></table></div></section>
+  <div class="eda-section-title"><span>04</span><div><h2>Category breakdown</h2><p>Most frequent values for key service-request dimensions.</p></div></div>
+  <section class="eda-category-grid">{% for group in eda.categories %}<article class="panel eda-category-card"><div class="eda-category-head"><div><span class="eyebrow">{{ group.unique }} DISTINCT VALUES</span><h3>{{ group.name }}</h3></div><span>{{ group.total }} rows</span></div><div class="eda-category-list">{% for item in group['items'] %}<div><span>{{ item.label }}</span><b>{{ item.count }}</b><small>{{ item.share }}</small></div>{% endfor %}</div></article>{% endfor %}</section>
+  <div class="eda-section-title"><span>05</span><div><h2>Resolution-time target</h2><p>Regression target quality and scale, based on records with a valid closure duration.</p></div></div>
+  <section class="eda-stat-grid eda-target-grid"><article class="panel eda-stat"><span>VALID TARGETS</span><strong>{{ eda.valid_targets }}</strong><small>Positive, usable durations</small></article><article class="panel eda-stat"><span>MEDIAN RESOLUTION</span><strong>{{ eda.target_median }}<small> hrs</small></strong><small>Among valid targets</small></article><article class="panel eda-stat"><span>95TH PERCENTILE</span><strong>{{ eda.target_p95 }}<small> hrs</small></strong><small>Longer than 95% of targets</small></article><article class="panel eda-stat"><span>CLOSED REQUESTS</span><strong>{{ eda.closed }}</strong><small>Marked closed in source data</small></article></section><p class="eda-target-note">{{ eda.target_note }}</p>
+  <div class="eda-section-title"><span>06</span><div><h2>Data visualizations</h2><p>Explore request volume, service mix, time to resolution, and geographic coverage.</p></div></div>
+  <section class="eda-chart-grid">{% for chart in eda.chart_cards %}<figure class="panel eda-chart-card"><figcaption><div><strong>{{ chart.title }}</strong><span>{{ chart.note }}</span></div><span class="eda-chart-mark">↗</span></figcaption><img src="{{ chart.src }}" alt="{{ chart.title }} chart for the NYC 311 dataset" loading="lazy"></figure>{% endfor %}</section>
+  <div class="eda-section-title"><span>07</span><div><h2>Key findings</h2><p>Fast takeaways from the current dataset extract.</p></div></div>
+  <section class="panel eda-findings">{% for finding in eda.findings %}<article><span>{{ "%02d"|format(loop.index) }}</span><p>{{ finding }}</p></article>{% endfor %}<div class="eda-finding-foot"><span>INTERPRETATION NOTE</span><p>These are descriptive patterns in the available extract. They do not establish service quality, causation, or citywide rates.</p></div></section>
+  {% elif active_page == 'regression' %}
+  <div class="page-heading"><div><div class="eyebrow">RESOLUTION-TIME ESTIMATION</div><h1>Regression diagnostics</h1><p>Inspect holdout predictions, error patterns, and model performance for closed service requests.</p></div><span class="count-badge">RIDGE · SERVING MODEL</span></div>
+  <section class="regression-kpis"><article class="kpi-card"><span class="kpi-overline">MEAN ABSOLUTE ERROR</span><div class="kpi-number">{{ eval_metrics.resolution_regressor.mae_hours|round(2) if eval_metrics.resolution_regressor else '—' }}<small> hours</small></div><div class="kpi-foot">Typical absolute prediction error</div></article><article class="kpi-card"><span class="kpi-overline">ROOT MEAN SQUARED ERROR</span><div class="kpi-number">{{ eval_metrics.resolution_regressor.rmse_hours|round(2) if eval_metrics.resolution_regressor else '—' }}<small> hours</small></div><div class="kpi-foot">Penalizes larger misses more</div></article><article class="kpi-card"><span class="kpi-overline">EXPLAINED VARIANCE</span><div class="kpi-number">{{ eval_metrics.resolution_regressor.r2|round(3) if eval_metrics.resolution_regressor else '—' }}</div><div class="kpi-foot">R² on the held-out split</div></article><article class="kpi-card"><span class="kpi-overline">HELD-OUT REQUESTS</span><div class="kpi-number">{{ '{:,}'.format(eval_metrics.dataset.resolution_test) if eval_metrics.dataset else '—' }}</div><div class="kpi-foot">Closed requests only</div></article></section>
+  {% if chart_files %}<div class="regression-section-heading"><div><span class="eyebrow">MODEL VISUALIZATIONS</span><h2>See how the estimates behave</h2><p>Diagnostics use the held-out test set; comparisons use the saved evaluation report.</p></div></div><section class="regression-chart-grid">
+    {% for chart in chart_files %}<figure class="panel regression-chart {{ 'regression-chart-feature' if loop.first else '' }}"><figcaption><strong>{{ chart.title }}</strong><span>{{ chart.note }}</span></figcaption><img src="{{ chart.src }}" alt="{{ chart.alt }}" loading="lazy"></figure>{% endfor %}
+  </section><p class="regression-note">Predictions are capped at zero and the target is limited to its 99th percentile during training. The test set contains closed requests only; open requests do not have a known resolution time.</p>{% else %}<section class="panel regression-empty"><div class="callout-symbol">↗</div><div><strong>Regression evaluation is not available yet.</strong><p>Train the project models with <code>python train_models.py</code> and make sure the dataset and saved evaluation report are present.</p></div></section>{% endif %}
+  {% elif active_page == 'models' %}
+  <div class="page-heading"><div><div class="eyebrow">SUPERVISED & UNSUPERVISED LEARNING</div><h1>Model lab</h1><p>Compare model families, understand their behavior, and inspect honest holdout metrics.</p></div><a class="button button-primary" href="{{ url_for('lifecycle') }}">View ML lifecycle →</a></div>
+  <section class="model-callout"><div class="callout-symbol">⟡</div><div><strong>Models are trained from your project dataset.</strong><p>Run <code>python train_models.py</code> to evaluate linear, tree-based, clustering, dimensionality-reduction and anomaly-detection techniques on a reproducible train/test split. Metrics below appear only after a training run.</p></div></section>
+  <section class="model-grid"><article id="ensemble" class="panel model-card"><div class="model-number">CLASSIFICATION</div><h2>Which agency should respond?</h2><p>Predicts the 311 agency from complaint type, description, and borough.</p><div class="tag-row"><span>Logistic regression</span><span>Decision tree</span><span>Random forest</span><span>Gradient boosting</span><span>XGBoost*</span><span>LightGBM*</span></div><div class="metric-list">{% for key,label in [('accuracy','Accuracy'),('precision','Precision'),('recall','Recall'),('f1_weighted','Weighted F1'),('roc_auc_ovr','ROC AUC · OVR'),('pr_auc_weighted','PR AUC'),('expected_calibration_error','Calibration error · lower is better')] %}<div><span>{{ label }}</span><b>{% if eval_metrics.agency_classifier and eval_metrics.agency_classifier.get(key) is not none %}{{ (eval_metrics.agency_classifier.get(key) * 100)|round(1) }}{% if key == 'expected_calibration_error' %} pp{% else %}%{% endif %}{% else %}—{% endif %}</b></div>{% endfor %}</div>{% if eval_metrics.classification_comparison %}<div class="compare-list"><strong>HOLDOUT MODEL COMPARISON · WEIGHTED F1</strong>{% for name, score in eval_metrics.classification_comparison.items() %}<div><span>{{ name|replace('_',' ')|title }}</span><b>{{ (score.f1_weighted * 100)|round(1) }}% · {{ (score.accuracy * 100)|round(1) }}% accuracy</b></div>{% endfor %}</div>{% endif %}<div class="chart-footnote">* XGBoost and LightGBM are trained automatically when installed. Decision trees, random forests and gradient-boosted trees are included in the baseline comparison.</div></article>
+  <article class="panel model-card"><div class="model-number">REGRESSION</div><h2>How long to resolve?</h2><p>Estimates elapsed resolution time for closed requests. Extreme delays are treated transparently.</p><div class="tag-row"><span>Linear regression</span><span>Ridge · Lasso · Elastic Net</span><span>Decision tree</span><span>Random forest</span><span>Gradient boosting</span><span>XGBoost · LightGBM*</span></div><div class="metric-list">{% for key,label in [('mae_hours','MAE'),('rmse_hours','RMSE'),('r2','R²')] %}<div><span>{{ label }}{% if key != 'r2' %} <small>(hours)</small>{% endif %}</span><b>{% if eval_metrics.resolution_regressor and eval_metrics.resolution_regressor.get(key) is not none %}{{ eval_metrics.resolution_regressor.get(key)|round(2) }}{% else %}—{% endif %}</b></div>{% endfor %}</div>{% if eval_metrics.regression_comparison %}<div class="compare-list"><strong>HOLDOUT MODEL COMPARISON · LOWER ERROR IS BETTER</strong>{% for name, score in eval_metrics.regression_comparison.items() %}<div><span>{{ name|replace('_',' ')|title }}</span><b>{{ score.mae_hours|round(1) }} hrs MAE</b></div>{% endfor %}</div>{% endif %}<div class="chart-footnote">* Optional packages are detected automatically during training.</div></article>
+  <article id="unsupervised" class="panel model-card"><div class="model-number">UNSUPERVISED LEARNING</div><h2>Find structure & outliers</h2><p>Explore unlabeled complaint patterns and rare, unusual service cases.</p><div class="tag-row"><span>K-means</span><span>Hierarchical</span><span>DBSCAN</span><span>PCA</span><span>t-SNE</span><span>UMAP*</span><span>Isolation Forest</span></div>{% if analysis %}<div class="metric-list"><div><span>K-means silhouette</span><b>{{ analysis.kmeans.silhouette|round(3) }}</b></div><div><span>K-means clusters</span><b>{{ analysis.kmeans.clusters }}</b></div><div><span>Hierarchical clusters</span><b>{{ analysis.hierarchical.clusters }}</b></div><div><span>DBSCAN clusters</span><b>{{ analysis.dbscan.clusters_excluding_noise }}</b></div><div><span>Isolation Forest outliers</span><b>{{ analysis.anomaly_detection.anomalies }} / {{ analysis.sample_size }}</b></div><div><span>t-SNE projection</span><b>{{ analysis.dimensionality_reduction.tsne_sample_size }} cases</b></div>{% if analysis.dimensionality_reduction.umap_sample_size %}<div><span>UMAP projection</span><b>{{ analysis.dimensionality_reduction.umap_sample_size }} cases</b></div>{% endif %}</div>{% else %}<div class="unsup-note">K-means, hierarchical and density clustering, PCA, t-SNE and Isolation Forest analysis runs with <code>python train_models.py</code>.</div>{% endif %}<div class="chart-footnote">* Optional <code>umap-learn</code> package.</div></article>
+  <article id="evaluation" class="panel model-card"><div class="model-number">MODEL EVALUATION</div><h2>Trust the evaluation</h2><p>Stratified training/validation/test splits, cross-validation, and class-aware scores.</p><div class="validation-list"><span>✓ &nbsp; Independent train, validation & test sets</span><span>✓ &nbsp; Weighted precision, recall & F1</span><span>✓ &nbsp; PR AUC, ROC AUC & confidence calibration</span><span>✓ &nbsp; Regression MAE, RMSE & R²</span><span>✓ &nbsp; Cross-validation + grid, random & optional Bayesian search</span></div>{% if eval_metrics.classification_cross_validation_f1_weighted %}<div class="unsup-note">{{ eval_metrics.classification_cross_validation_f1_weighted.folds }}-fold CV F1 {{ (eval_metrics.classification_cross_validation_f1_weighted.mean * 100)|round(1) }}% ± {{ (eval_metrics.classification_cross_validation_f1_weighted.std * 100)|round(1) }}% · validation-selected C = {{ eval_metrics.hyperparameter_search.validation_best_c }}</div>{% if eval_metrics.hyperparameter_search.randomized_search %}<div class="unsup-note">Random search · best C = {{ eval_metrics.hyperparameter_search.randomized_search.best_parameters.classifier__C }} · CV weighted F1 {{ (eval_metrics.hyperparameter_search.randomized_search.best_cv_f1_weighted * 100)|round(1) }}%</div>{% endif %}{% if eval_metrics.hyperparameter_search.bayesian_search %}<div class="unsup-note">Bayesian search · best C = {{ eval_metrics.hyperparameter_search.bayesian_search.best_parameters.classifier__C|round(2) }} · CV weighted F1 {{ (eval_metrics.hyperparameter_search.bayesian_search.best_cv_f1_weighted * 100)|round(1) }}%</div>{% endif %}{% endif %}<div class="unsup-note">Regularization shrinks weak coefficients to control overfit; compare train and holdout scores to reason about the bias–variance tradeoff. TF-IDF normalizes feature scale to support stable optimization. Open requests are excluded from resolution targets.</div></article></section>
+  {% elif active_page == 'predict' %}
+  <div class="page-heading"><div><div class="eyebrow">A BETTER ROUTE FOR EVERY REQUEST</div><h1>Route a service request</h1><p>Describe the issue. CivicFix recommends a response team and estimates resolution time.</p></div><span class="count-badge live-badge"><i></i> MODEL SERVING</span></div>
+  <section class="predict-layout"><article class="panel form-panel"><div class="panel-heading"><div><h2>Tell us what needs attention</h2><p>Details help us find the most relevant response.</p></div><span class="step-badge">NEW REQUEST</span></div>
+  {% if error %}<div class="notice error">{{ error }}</div>{% endif %}<form method="post" action="{{ url_for('predict') }}"><label class="field-label" for="borough">Where is the issue? <b>*</b></label><select class="field-input" id="borough" name="borough" required><option value="">Select a borough</option>{% for b in boroughs %}<option value="{{ b }}" {{ 'selected' if request.form.get('borough') == b else '' }}>{{ b|title }}</option>{% endfor %}</select><label class="field-label" for="complaint_type">What kind of issue? <b>*</b></label><select class="field-input" id="complaint_type" name="complaint_type" required><option value="">Select a complaint type</option>{% for c in complaint_types %}<option value="{{ c }}" {{ 'selected' if request.form.get('complaint_type') == c else '' }}>{{ c }}</option>{% endfor %}<option value="Other">Other / not listed</option></select><label class="field-label" for="descriptor">Describe the issue <b>*</b></label><textarea class="field-input field-textarea" id="descriptor" name="descriptor" maxlength="500" placeholder="For example: A deep pothole near the intersection that has damaged several tires…" required>{{ request.form.get('descriptor','') }}</textarea><div class="field-hint">Keep it concise and specific. Please do not include personal information.</div><button class="button button-primary submit-button" type="submit">Find the right response team <span>→</span></button><div class="privacy-note">⌑ &nbsp;Your request is used for local model inference and is not sent to the city.</div></form></article>
+  <div class="result-column">{% if result %}<article class="result-card"><div class="result-top"><span class="result-check">✓</span><div><div class="result-eyebrow">ROUTING RECOMMENDATION</div><h2>{{ result.agency }}</h2></div><span class="result-live">PREDICTED</span></div><div class="result-body"><div class="result-detail"><span>COMPLAINT</span><strong>{{ result.complaint }}</strong><small>{{ result.borough|title }}</small></div><div class="result-detail"><span>ESTIMATED RESOLUTION</span><strong>{{ result.hours }} <small>hours</small></strong><small>About {{ result.days }} days</small></div>{% if result.confidence is not none %}<div class="confidence-row"><span>Model confidence</span><b>{{ result.confidence }}%</b></div><div class="confidence-track"><i style="width: {{ result.confidence }}%"></i></div>{% endif %}<div class="inference-meta"><span>Inference {{ result.latency }} ms</span><span>Trace #{{ result.id }}</span></div></div></article>{% else %}<article class="empty-result"><div class="empty-orbit"><span>✳</span></div><h2>Your next step starts here.</h2><p>Submit a request and see its recommended agency, estimated resolution time, and live inference details.</p><div class="result-features"><span><i>✓</i> Explainable routing</span><span><i>✓</i> Data-backed estimate</span><span><i>✓</i> Traceable prediction</span></div></article>{% endif %}
+  <article class="panel recent-dispatches"><div class="panel-heading"><div><h2>Recent predictions</h2><p>Requests routed in this browser session</p></div><a class="small-link" href="{{ url_for('operations') }}">View monitor →</a></div>{% if history %}<div class="prediction-list">{% for item in history[:5] %}<div class="prediction-row"><span class="prediction-icon">↗</span><span class="prediction-copy"><strong>{{ item.complaint }}</strong><small>{{ item.borough|title }} · {{ item.latency }} ms</small></span><span class="agency-chip">{{ item.agency }}</span></div>{% endfor %}</div>{% else %}<div class="empty-state pad-empty">Your routed requests will show up here.</div>{% endif %}</article></div></section>
+  {% elif active_page == 'lifecycle' %}
+  <div class="page-heading"><div><div class="eyebrow">FROM RAW RECORD TO REAL-WORLD DECISION</div><h1>Follow the full lifecycle</h1><p>Trace how a single 311 prediction is shaped, served, evaluated, and monitored.</p></div><a class="button button-primary" href="{{ url_for('predict') }}">Try a prediction →</a></div>
+  <section class="trace-intro"><div><div class="trace-overline">PREDICTION TRACE</div><h2>One request. Every stage.</h2><p>Every prediction carries its inputs, model version, response team, estimate and latency into an auditable trace.</p></div><div class="trace-id">6 <span>PIPELINE STAGES</span></div></section>
+  <section class="timeline">{% for n,title,kicker,description,detail in [('01','Data ingestion','RAW RECORDS','NYC 311 data is loaded from the project dataset. Dates are parsed, missing values handled and invalid resolution durations excluded from training.','nyc_311_data.csv · local source'),('02','Feature preparation','FEATURES','Complaint description is converted into TF-IDF text features, borough is one-hot encoded, and feature transforms are fit on training data only.','TF-IDF · One-hot encoding'),('03','Model training','TRAINING','Supervised baselines are compared on a reproducible split. Logistic regression routes agencies; tree ensembles capture nonlinear patterns.','Train split · fixed random seed'),('04','Model evaluation','VALIDATION','Held-out predictions are scored on accuracy, precision, recall, F1, ROC AUC, PR AUC, MAE, RMSE and R². Cross-validation is isolated to training data.','Metrics saved to models/metrics.json'),('05','Model deployment','SERVING','The fitted preprocessing and prediction pipeline is loaded as a versioned artifact and served through the CivicFix web form and JSON health endpoint.','Flask · joblib · /health'),('06','Monitoring & feedback','MONITORING','Each inference records timestamp, latency, prediction and resolution estimate. Compare live input patterns to training data to spot feature drift and falling performance.','logs/prediction_log.jsonl · /operations')] %}<article class="timeline-step"><div class="timeline-marker">{{ n }}</div><div class="timeline-content"><div class="step-meta">{{ kicker }} <span>STAGE {{ loop.index }} / 6</span></div><h3>{{ title }}</h3><p>{{ description }}</p><code>{{ detail }}</code></div><span class="step-complete">●</span></article>{% endfor %}</section>
+  <section class="trace-example"><div class="trace-example-icon">↗</div><div><span>TRY IT YOURSELF</span><strong>Follow a new request from form submission to logged model response.</strong></div><a href="{{ url_for('predict') }}">Create a trace →</a></section>
+  {% elif active_page == 'operations' %}
+  <div class="page-heading"><div><div class="eyebrow">PRODUCTION-STYLE ML ENGINEERING</div><h1>Model monitoring</h1><p>See serving health, inference latency, request traces and the signals that matter in production.</p></div><div class="ops-page-actions"><span class="count-badge live-badge"><i></i> LOCAL SERVING</span><a class="button button-primary" href="{{ url_for('lifecycle') }}">Lifecycle trace →</a></div></div>
+  <section class="ops-kpis"><article class="kpi-card"><span class="kpi-overline">PYTHON PIPELINES</span><div class="kpi-number small-num">{{ loaded_models|length }}<small> in memory</small></div><div class="kpi-foot">Agency route · resolution estimate</div></article><article class="kpi-card"><span class="kpi-overline">SESSION PREDICTIONS</span><div class="kpi-number small-num">{{ history|length }}</div><div class="kpi-foot">Current browser session</div></article><article class="kpi-card"><span class="kpi-overline">SCORED OUTCOMES</span><div class="kpi-number small-num">{{ feedback_count }}</div><div class="kpi-foot">Delayed real-world feedback</div></article><article class="kpi-card"><span class="kpi-overline">HEALTH CHECK</span><div class="kpi-number small-num green-text">● {{ 'Ready' if loaded_models|length == 2 and stats.data_available else 'Degraded' }}</div><div class="kpi-foot"><a href="{{ url_for('health') }}">GET /health →</a></div></article></section>
+  <section class="panel"><div class="panel-heading"><div><h2>Inference traces</h2><p>Each trace ties request features to the serving artifact, evaluation run, prediction and latency.</p></div><span class="panel-tag">LATEST 12</span></div><div class="table-scroll"><table><thead><tr><th>TRACE ID</th><th>TIME (UTC)</th><th>COMPLAINT</th><th>BOROUGH</th><th>ROUTED AGENCY</th><th>ESTIMATE</th><th>LATENCY</th><th>MODEL VERSION</th></tr></thead><tbody>{% for item in prediction_log %}<tr><td class="id-cell">#{{ item.id }}</td><td class="muted">{{ item.timestamp[:19].replace('T',' ') }}</td><td>{{ item.complaint }}</td><td>{{ item.borough|title }}</td><td><span class="agency-chip">{{ item.agency }}</span></td><td>{{ item.hours }} hrs</td><td>{{ item.latency }} ms</td><td class="muted">{{ item.model_version }}</td></tr>{% else %}<tr><td colspan="8" class="empty-state">No requests have been scored yet. Route one to create your first trace.</td></tr>{% endfor %}</tbody></table></div><div class="table-note">Trace data remains local to this CivicFix project in logs/prediction_log.jsonl and includes the feature schema, dataset size and evaluation run.</div></section>
+  <section class="ops-bottom"><article class="panel"><div class="panel-heading"><div><h2>Feature drift monitor</h2><p>Largest share change from the training dataset.</p></div><span class="panel-tag">{{ drift.sample_size }} TRACES</span></div><div class="drift-row"><span>Borough distribution shift</span><b>{{ drift.borough_shift if drift.borough_shift is not none else '—' }}{% if drift.borough_shift is not none %} pp{% endif %}</b><em class="{{ 'drift-watch' if drift.borough_label == 'Review shift' else '' }}">{{ drift.borough_label }}</em></div><div class="drift-row"><span>Complaint mix shift</span><b>{{ drift.complaint_shift if drift.complaint_shift is not none else '—' }}{% if drift.complaint_shift is not none %} pp{% endif %}</b><em class="{{ 'drift-watch' if drift.complaint_label == 'Review shift' else '' }}">{{ drift.complaint_label }}</em></div><div class="table-note">Largest absolute category-share change vs. full dataset. Review is a simple alert, not a statistical significance test. At least 20 logged predictions are needed.</div><div class="validation-list"><span>◷ &nbsp;Track agency precision / recall against delayed outcomes</span><span>◷ &nbsp;Re-evaluate model when drift or performance loss persists</span></div><div class="performance-box"><strong>DELAYED OUTCOME PERFORMANCE</strong><div><span>Agency routing accuracy</span><b>{{ feedback_accuracy|round(1) ~ '%' if feedback_accuracy is not none else 'Awaiting outcomes' }}</b></div><div><span>Resolution estimate MAE</span><b>{{ feedback_mae|round(1) ~ ' hrs' if feedback_mae is not none else 'Awaiting outcomes' }}</b></div><small>Based on {{ feedback_count }} matched prediction outcome{% if feedback_count != 1 %}s{% endif %}.</small></div></article><article class="panel"><div class="panel-heading"><div><h2>Record a real outcome</h2><p>Close the loop when an agency or resolution time is known.</p></div></div>{% if feedback_error %}<div class="notice error">{{ feedback_error }}</div>{% endif %}{% if feedback_notice %}<div class="notice">{{ feedback_notice }}</div>{% endif %}<form class="feedback-form" action="{{ url_for('feedback_form') }}" method="post"><label class="field-label" for="trace_id">Prediction trace ID</label><input class="field-input" id="trace_id" name="trace_id" required placeholder="ID from the trace table"><label class="field-label" for="actual_agency">Agency that responded</label><input class="field-input" id="actual_agency" name="actual_agency" required placeholder="For example: NYPD"><label class="field-label" for="actual_hours">Actual resolution time (hours)</label><input class="field-input" id="actual_hours" name="actual_hours" type="number" min="0" step="0.1" placeholder="Optional · add when resolved"><button class="button button-primary submit-button" type="submit">Save observed outcome <span>→</span></button></form><div class="chart-footnote">Matches feedback to a saved request trace and updates live accuracy and MAE above.</div><div class="endpoint-row"><code>POST</code><span>/api/feedback</span><small>Record delayed model outcomes</small></div></article></section>
+  {% endif %}
+  <footer class="footer"><span>✳ &nbsp;CivicFix</span><span>Building a more responsive city, one request at a time.</span><span>NYC 311 · Civic analytics</span></footer>
+  </div>
+</main>
+</body></html>
